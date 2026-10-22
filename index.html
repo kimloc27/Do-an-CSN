@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduMeet - Tư vấn học tập</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" href="index.html"><span class="logo">E</span> EduMeet</a>
+    <span class="topbar-note">Kết nối sinh viên và giảng viên</span>
+</header>
+
+<main class="auth-layout">
+    <section class="intro-panel">
+        <span class="eyebrow">CỔNG TƯ VẤN HỌC TẬP</span>
+        <h1>Chủ động học tập.<br><span>Vững bước tương lai.</span></h1>
+        <p>Đăng ký lịch tư vấn học tập với giảng viên nhanh chóng và thuận tiện.</p>
+        <div class="intro-points">
+            <div>✓ Xem lịch trống của giảng viên</div>
+            <div>✓ Đăng ký hoặc hủy lịch dễ dàng</div>
+            <div>✓ Quản lý lịch tư vấn trực tuyến</div>
+        </div>
+    </section>
+
+    <section class="auth-card">
+        <div class="auth-tabs">
+            <button type="button" class="auth-tab active" data-auth="login">Đăng nhập</button>
+            <button type="button" class="auth-tab" data-auth="register">Đăng ký</button>
+        </div>
+
+        <form id="login-form" class="auth-form">
+            <h2>Chào mừng trở lại!</h2>
+            <p class="muted">Đăng nhập vào tài khoản EduMeet của bạn.</p>
+
+            <label for="login-email">Email</label>
+            <input id="login-email" type="email" placeholder="ban@example.com" required>
+
+            <label for="login-password">Mật khẩu</label>
+            <input id="login-password" type="password" placeholder="Nhập mật khẩu" required>
+
+            <button class="btn btn-primary full" type="submit">Đăng nhập →</button>
+            <p id="login-message" class="form-message"></p>
+
+            <div class="demo-hint">
+                Tài khoản sinh viên dùng thử:<br>
+                Email: <b>demo@gmail.com</b><br>
+                Mật khẩu: <b>123456</b>
+            </div>
+        </form>
+
+        <form id="register-form" class="auth-form hidden">
+            <h2>Tạo tài khoản</h2>
+            <p class="muted">Chọn vai trò để bắt đầu sử dụng EduMeet.</p>
+
+            <label for="register-name">Họ và tên</label>
+            <input id="register-name" type="text" placeholder="Nguyễn Văn A" required>
+
+            <label for="register-role">Vai trò</label>
+            <select id="register-role" required>
+                <option value="">-- Chọn vai trò --</option>
+                <option value="student">Sinh viên</option>
+                <option value="lecturer">Giảng viên</option>
+            </select>
+
+            <label for="register-email">Email</label>
+            <input id="register-email" type="email" placeholder="ban@example.com" required>
+
+            <label for="register-password">Mật khẩu</label>
+            <input id="register-password" type="password" placeholder="Ít nhất 6 ký tự" minlength="6" required>
+
+            <button class="btn btn-primary full" type="submit">Tạo tài khoản →</button>
+            <p id="register-message" class="form-message"></p>
+        </form>
+    </section>
+</main>
+
+<footer>© 2026 EduMeet - Hỗ trợ kết nối học tập</footer>
+<script src="script.js"></script>
+</body>
+</html>

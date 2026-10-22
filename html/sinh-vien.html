@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduMeet - Sinh viên</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<main class="dashboard">
+    <nav class="dashboard-nav">
+        <a class="brand" href="../index.html"><span class="logo">E</span> EduMeet</a>
+        <div class="user-menu">
+    <button type="button" id="profile-menu-btn" class="profile-button">
+        <img
+    src="https://ui-avatars.com/api/?name=User&background=635bdf&color=fff"
+    alt="Ảnh đại diện"
+    id="profile-avatar"
+    class="profile-avatar"
+>
+        <span id="student-user-name">Sinh viên</span>
+        <span class="dropdown-arrow">▾</span>
+    </button>
+
+    <div id="profile-dropdown" class="profile-dropdown hidden">
+
+    <!-- Đổi ảnh đại diện -->
+    <label for="avatar-upload" class="profile-dropdown-item">
+         Đổi ảnh đại diện
+    </label>
+
+    <input
+        type="file"
+        id="avatar-upload"
+        accept="image/png,image/jpeg,image/webp"
+        hidden
+    >
+   <button type="button" id="open-student-profile-btn">
+    👨‍🎓 Thông tin sinh viên
+</button>
+
+    <!-- Đổi mật khẩu -->
+    <button type="button" id="open-password-btn">
+        🔒 Đổi mật khẩu
+    </button>
+
+    <!-- Đăng xuất -->
+    <button
+        type="button"
+        id="logout-btn"
+    >
+        ↪ Đăng xuất
+    </button>
+
+</div>
+</div>
+    </nav>
+    <!-- HỒ SƠ SINH VIÊN -->
+<section id="student-profile-page" class="section-block hidden">
+    <div class="section-heading">
+        <div>
+            <h2>Thông tin sinh viên</h2>
+            <p class="muted">Thông tin này sẽ được đính kèm vào lịch tư vấn của bạn.</p>
+        </div>
+    </div>
+
+    <form id="student-profile-form" class="auth-form">
+        <label for="profile-student-code">Mã sinh viên</label>
+        <input type="text" id="profile-student-code"
+               placeholder="Nhập mã sinh viên" required>
+
+        <label for="profile-student-class">Lớp</label>
+        <input type="text" id="profile-student-class"
+               placeholder="Ví dụ: DA24TTC" required>
+
+        <label for="profile-student-major">Ngành học</label>
+        <input type="text" id="profile-student-major"
+               placeholder="Ví dụ: Công nghệ thông tin" required>
+
+        <label for="profile-student-phone">Số điện thoại</label>
+        <input type="tel" id="profile-student-phone"
+               placeholder="Nhập số điện thoại" required>
+
+        <p id="student-profile-message" class="form-message"></p>
+
+        <button type="submit" class="btn btn-primary">
+            Lưu thông tin
+        </button>
+
+        <button type="button" id="back-to-dashboard"
+                class="btn btn-outline">
+            Quay lại
+        </button>
+    </form>
+</section>
+
+    <section class="welcome-row">
+        <div>
+            <span class="eyebrow">KHÔNG GIAN SINH VIÊN</span>
+            <h1>Xin chào, <span id="student-welcome-name">bạn</span>!</h1>
+            <p class="muted">Tìm kiếm và đăng ký lịch tư vấn với giảng viên.</p>
+        </div>
+        <div class="welcome-mark">✦</div>
+    </section>
+
+    <section class="stats-grid">
+        <article class="stat-card">
+            <span class="stat-icon purple">▦</span>
+            <div><p>Lịch còn trống</p><strong id="available-count">0</strong></div>
+        </article>
+        <article class="stat-card">
+            <span class="stat-icon green">✓</span>
+            <div><p>Lịch đã đăng ký</p><strong id="booked-count">0</strong></div>
+        </article>
+        <article class="stat-card">
+            <span class="stat-icon orange">♧</span>
+            <div><p>Giảng viên</p><strong id="lecturer-count">0</strong></div>
+        </article>
+    </section>
+
+    <section class="section-block">
+        <div class="section-heading">
+            <div>
+                <h2>Khung giờ tư vấn</h2>
+                <p class="muted">Chọn một khung giờ còn trống bên dưới.</p>
+            </div>
+        </div>
+
+        <div class="filters">
+            <input id="search-input" type="search" placeholder="Tìm giảng viên, môn học...">
+            <input id="day-filter" type="date" aria-label="Lọc theo ngày">
+        </div>
+
+        <div id="slot-grid" class="slot-grid"></div>
+        <p id="empty-slots" class="empty-state hidden">Không tìm thấy lịch phù hợp.</p>
+    </section>
+
+    <section class="section-block">
+        <div class="section-heading">
+            <div>
+                <h2>Lịch tư vấn của tôi</h2>
+                <p class="muted">Xem hoặc hủy lịch đã đăng ký.</p>
+            </div>
+        </div>
+        <div id="my-bookings" class="booking-list"></div>
+        <p id="empty-bookings" class="empty-state">Bạn chưa đăng ký lịch tư vấn nào.</p>
+
+    <!-- CỬA SỔ ĐỔI MẬT KHẨU -->
+<div id="password-modal" class="modal-overlay hidden">
+    <div class="password-modal">
+        <button type="button" id="close-password-btn"
+                class="modal-close" aria-label="Đóng">×</button>
+
+        <div class="password-modal-icon">🔐</div>
+        <h2>Đổi mật khẩu</h2>
+        <p class="muted">Hãy nhập mật khẩu hiện tại và mật khẩu mới.</p>
+
+        <form id="change-password-form">
+            <label for="current-password">Mật khẩu hiện tại</label>
+            <input type="password" id="current-password"
+                   placeholder="Nhập mật khẩu hiện tại" required>
+
+            <label for="new-password">Mật khẩu mới</label>
+            <input type="password" id="new-password"
+                   placeholder="Ít nhất 6 ký tự" minlength="6" required>
+
+            <label for="confirm-password">Xác nhận mật khẩu mới</label>
+            <input type="password" id="confirm-password"
+                   placeholder="Nhập lại mật khẩu mới" minlength="6" required>
+
+            <button type="submit" class="btn btn-primary full">
+                Cập nhật mật khẩu
+            </button>
+
+            <p id="change-password-message" class="form-message"></p>
+        </form>
+    </div>
+</div>
+<!-- POP-UP THÔNG BÁO -->
+<div id="booking-popup" class="booking-popup hidden">
+    <div class="booking-popup-content">
+        <button
+            type="button"
+            id="booking-popup-close"
+            class="booking-popup-close"
+            aria-label="Đóng"
+        >×</button>
+
+        <div id="booking-popup-icon" class="booking-popup-icon">✓</div>
+
+        <h2 id="booking-popup-title">Thành công!</h2>
+
+        <p id="booking-popup-message">
+            Thao tác đã hoàn tất.
+        </p>
+
+        <button
+            type="button"
+            id="booking-popup-ok"
+            class="btn btn-primary full"
+        >
+            Đã hiểu
+        </button>
+    </div>
+</div>
+<!-- POPUP THÔNG BÁO ĐĂNG KÝ / HỦY LỊCH -->
+<div id="booking-popup" class="modal-overlay hidden">
+    <div class="password-modal booking-popup-content">
+        <button type="button" id="booking-popup-close"
+                class="modal-close" aria-label="Đóng">×</button>
+
+        <div id="booking-popup-icon" class="password-modal-icon">✓</div>
+
+        <h2 id="booking-popup-title">Thông báo</h2>
+
+        <p id="booking-popup-message" class="muted">
+            Thao tác của bạn đã hoàn tất.
+        </p>
+
+        <button type="button" id="booking-popup-ok"
+                class="btn btn-primary full">
+            OK
+        </button>
+    </div>
+</div>
+
+</main>
+<script src="../script.js"></script>
+</body>
+</html>
