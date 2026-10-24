@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -10,7 +9,10 @@
 <body>
 <main class="dashboard">
     <nav class="dashboard-nav">
-        <a class="brand" href="../index.html"><span class="logo">E</span> EduMeet</a>
+       <a class="brand" href="../index.html">
+    <img src="../images/Logo.png" alt="Logo TVU" class="tvu-logo">
+    EduMeet
+</a>
         <div class="user-menu">
     <button type="button" id="profile-menu-btn" class="profile-button">
         <img
@@ -25,9 +27,23 @@
 
     <div id="profile-dropdown" class="profile-dropdown hidden">
 
+    <!-- Thông tin tài khoản đăng nhập -->
+   <div class="profile-account-info">
+    <span>
+        Tên sinh viên: <br>
+        <strong id="account-login-name">Sinh viên</strong>
+    </span>
+
+    <span>
+        Email: <strong id="account-login-email">email@gmail.com</strong>
+    </span>
+</div>
+
+    <hr>
+
     <!-- Đổi ảnh đại diện -->
     <label for="avatar-upload" class="profile-dropdown-item">
-         Đổi ảnh đại diện
+        Đổi ảnh đại diện
     </label>
 
     <input
@@ -36,68 +52,139 @@
         accept="image/png,image/jpeg,image/webp"
         hidden
     >
-   <button type="button" id="open-student-profile-btn">
-    👨‍🎓 Thông tin sinh viên
-</button>
+
+    <!-- Thông tin sinh viên -->
+    <button type="button" id="open-student-profile-btn">
+        Thông tin sinh viên
+    </button>
 
     <!-- Đổi mật khẩu -->
     <button type="button" id="open-password-btn">
-        🔒 Đổi mật khẩu
+        Đổi mật khẩu
     </button>
 
     <!-- Đăng xuất -->
-    <button
-        type="button"
-        id="logout-btn"
-    >
+    <button type="button" id="logout-btn">
         ↪ Đăng xuất
     </button>
 
 </div>
 </div>
     </nav>
-    <!-- HỒ SƠ SINH VIÊN -->
+<!-- HỒ SƠ SINH VIÊN -->
 <section id="student-profile-page" class="section-block hidden">
+
     <div class="section-heading">
         <div>
-            <h2>Thông tin sinh viên</h2>
-            <p class="muted">Thông tin này sẽ được đính kèm vào lịch tư vấn của bạn.</p>
+            <h2>👨‍🎓 Thông tin sinh viên</h2>
+            <p class="muted">
+                Quản lý thông tin cá nhân và học tập của bạn.
+            </p>
         </div>
     </div>
 
-    <form id="student-profile-form" class="auth-form">
-        <label for="profile-student-code">Mã sinh viên</label>
-        <input type="text" id="profile-student-code"
-               placeholder="Nhập mã sinh viên" required>
+    <div class="student-info-layout">
 
-        <label for="profile-student-class">Lớp</label>
-        <input type="text" id="profile-student-class"
-               placeholder="Ví dụ: DA24TTC" required>
+        <!-- ẢNH ĐẠI DIỆN -->
+        <div class="student-profile-avatar">
+            <img id="student-info-avatar" src="" alt="Ảnh đại diện">
+        </div>
 
-        <label for="profile-student-major">Ngành học</label>
-        <input type="text" id="profile-student-major"
-               placeholder="Ví dụ: Công nghệ thông tin" required>
+        <!-- FORM THÔNG TIN -->
+        <form id="student-profile-form" class="auth-form student-info-fields">
 
-        <label for="profile-student-phone">Số điện thoại</label>
-        <input type="tel" id="profile-student-phone"
-               placeholder="Nhập số điện thoại" required>
+            <div class="student-field">
+                <label for="profile-student-code">Mã sinh viên</label>
+                <input type="text" id="profile-student-code"
+                       placeholder="Nhập mã sinh viên" required>
+            </div>
 
-        <p id="student-profile-message" class="form-message"></p>
+            <div class="student-field">
+                <label for="profile-student-name">Họ và tên</label>
+                <input type="text" id="profile-student-name"
+                       placeholder="Nhập họ và tên" required>
+            </div>
 
-        <button type="submit" class="btn btn-primary">
-            Lưu thông tin
-        </button>
+            <div class="student-field">
+                <label for="profile-student-dob">Ngày sinh</label>
+                <input type="date" id="profile-student-dob">
+            </div>
 
-        <button type="button" id="back-to-dashboard"
-                class="btn btn-outline">
-            Quay lại
-        </button>
-    </form>
+            <div class="student-field">
+                <label for="profile-student-gender">Giới tính</label>
+                <select id="profile-student-gender">
+                    <option value="Nam" selected>Nam</option>
+                    <option value="Nữ">Nữ</option>
+                    <option value="Khác">Khác</option>
+                </select>
+            </div>
+
+            <div class="student-field">
+                <label for="profile-student-class">Lớp</label>
+                <input type="text" id="profile-student-class"
+                       placeholder="Ví dụ: DA24TTC" required>
+            </div>
+
+            <div class="student-field">
+                <label for="profile-student-major">Ngành học</label>
+                <input type="text" id="profile-student-major"
+                       placeholder="Ví dụ: Công nghệ thông tin" required>
+            </div>
+
+            <div class="student-field">
+                <label for="profile-student-phone">Số điện thoại</label>
+                <input type="tel" id="profile-student-phone"
+                       placeholder="Nhập số điện thoại" required>
+            </div>
+
+            <div class="student-field">
+                <label for="profile-student-birthplace">Nơi sinh</label>
+                <input type="text" id="profile-student-birthplace"
+                       placeholder="Nhập nơi sinh">
+            </div>
+
+            <div class="student-field">
+                <label for="profile-student-nationality">Quốc tịch</label>
+                <input type="text" id="profile-student-nationality"
+                       value="Việt Nam">
+            </div>
+
+            <div class="student-field">
+                <label for="profile-student-email">Email</label>
+                <input type="email" id="profile-student-email"
+                       placeholder="Nhập email">
+            </div>
+
+            <div class="student-field student-field-full">
+                <label for="profile-student-address">Địa chỉ</label>
+                <textarea id="profile-student-address"
+                          placeholder="Nhập địa chỉ hiện tại"
+                          rows="3"></textarea>
+            </div>
+
+            <!-- THÔNG BÁO -->
+            <p id="student-profile-message"
+               class="form-message student-field-full"></p>
+
+            <!-- NÚT CHỨC NĂNG -->
+            <div class="student-form-actions">
+                <button type="submit" class="btn btn-primary">
+                    Lưu thông tin
+                </button>
+
+                <button type="button" id="back-to-dashboard"
+                        class="btn btn-outline">
+                    Quay lại
+                </button>
+            </div>
+
+        </form>
+    </div>
 </section>
 
     <section class="welcome-row">
         <div>
-            <span class="eyebrow">KHÔNG GIAN SINH VIÊN</span>
+            <span class="eyebrow">KHÔNG GIAN CỦA SINH VIÊN</span>
             <h1>Xin chào, <span id="student-welcome-name">bạn</span>!</h1>
             <p class="muted">Tìm kiếm và đăng ký lịch tư vấn với giảng viên.</p>
         </div>
@@ -203,24 +290,69 @@
         </button>
     </div>
 </div>
-<!-- POPUP THÔNG BÁO ĐĂNG KÝ / HỦY LỊCH -->
-<div id="booking-popup" class="modal-overlay hidden">
-    <div class="password-modal booking-popup-content">
-        <button type="button" id="booking-popup-close"
+<!-- POPUP YÊU CẦU CẬP NHẬT HỒ SƠ -->
+<div id="profile-required-modal" class="modal-overlay hidden">
+    <div class="password-modal profile-required-modal">
+        <button type="button" id="profile-required-close"
                 class="modal-close" aria-label="Đóng">×</button>
 
-        <div id="booking-popup-icon" class="password-modal-icon">✓</div>
+        <div class="password-modal-icon">👨‍🎓</div>
 
-        <h2 id="booking-popup-title">Thông báo</h2>
+        <h2>Chưa có thông tin sinh viên</h2>
 
-        <p id="booking-popup-message" class="muted">
-            Thao tác của bạn đã hoàn tất.
+        <p class="muted">
+            Bạn cần hoàn thành hồ sơ sinh viên trước khi đăng ký lịch tư vấn.
         </p>
 
-        <button type="button" id="booking-popup-ok"
-                class="btn btn-primary full">
-            OK
-        </button>
+        <div class="profile-required-actions">
+            <button type="button" id="profile-required-cancel"
+                    class="btn btn-outline">
+                Để sau
+            </button>
+
+            <button type="button" id="profile-required-fill"
+                    class="btn btn-primary">
+                Điền thông tin ngay
+            </button>
+        </div>
+    </div>
+</div>
+<!-- POPUP NHẬP NỘI DUNG TƯ VẤN -->
+<div id="consultation-modal" class="modal-overlay hidden">
+    <div class="password-modal consultation-modal">
+
+        <button type="button" id="consultation-close"
+                class="modal-close" aria-label="Đóng">×</button>
+
+        <div class="password-modal-icon">💬</div>
+
+        <h2>Nội dung cần tư vấn</h2>
+
+        <p class="muted">
+            Hãy cho giảng viên biết vấn đề bạn muốn trao đổi.
+        </p>
+
+        <form id="consultation-form">
+            <label for="consultation-content">
+                Nội dung tư vấn
+            </label>
+
+            <textarea id="consultation-content"
+                      rows="4"
+                      placeholder="Nhập nội dung cần tư vấn..."
+                      required></textarea>
+
+            <div class="consultation-actions">
+                <button type="button" id="consultation-cancel"
+                        class="btn btn-outline">
+                    Hủy
+                </button>
+
+                <button type="submit" class="btn btn-primary">
+                    Xác nhận đăng ký
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 

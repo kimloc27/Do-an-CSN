@@ -139,12 +139,12 @@ function initializeData() {
 
     // Tạo tài khoản giảng viên mẫu để thử nghiệm.
     if (!users.some(user =>
-        user.email.toLowerCase() === "lecturer-demo@edumeet.vn"
+        user.email.toLowerCase() === "giangvien@gmail.com"
     )) {
         users.push({
             id: "demo-lecturer",
             name: "Nguyễn Văn Minh",
-            email: "lecturer-demo@edumeet.vn",
+            email: "giangvien@gmail.com",
             password: "123456",
             role: "lecturer"
         });
@@ -171,7 +171,7 @@ function initializeData() {
         saveData(KEYS.slots, [
             {
                 id: makeId(),
-                lecturerEmail: "lecturer-demo@edumeet.vn",
+                lecturerEmail: "giangvien@gmail.com",
                 lecturerName: "Nguyễn Văn Minh",
                 department: "Khoa Công nghệ thông tin",
                 subject: "Lập trình Web",
@@ -183,7 +183,7 @@ function initializeData() {
             },
             {
                 id: makeId(),
-                lecturerEmail: "lecturer-demo@edumeet.vn",
+                lecturerEmail: "giangvien@gmail.com",
                 lecturerName: "Nguyễn Văn Minh",
                 department: "Khoa Công nghệ thông tin",
                 subject: "Cơ sở dữ liệu",
@@ -195,7 +195,7 @@ function initializeData() {
             },
             {
                 id: makeId(),
-                lecturerEmail: "lecturer-demo@edumeet.vn",
+                lecturerEmail: "giangvien@gmail.com",
                 lecturerName: "Nguyễn Văn Minh",
                 department: "Khoa Công nghệ thông tin",
                 subject: "Cấu trúc dữ liệu",
@@ -567,6 +567,7 @@ function renderStudentPage() {
 }
 
 // Hàm đăng ký lịch đã sửa.
+
 function bookSlot(slotId) {
     const user = getCurrentUser();
 
@@ -577,27 +578,24 @@ function bookSlot(slotId) {
 
     const profile = getStudentProfile(user.email);
 
-    if (!profile ||
+    // Kiểm tra hồ sơ sinh viên
+    if (
+        !profile ||
         !profile.studentCode ||
+        !profile.studentName ||
         !profile.studentClass ||
         !profile.studentMajor ||
-        !profile.studentPhone) {
-
-        showBookingPopup(
-            "Chưa có hồ sơ sinh viên",
-            "Vui lòng mở menu avatar, chọn Thông tin sinh viên và lưu hồ sơ trước khi đăng ký.",
-            "error"
-        );
-
+        !profile.studentPhone
+    ) {
+        document.getElementById("profile-required-modal")
+            ?.classList.remove("hidden");
         return;
     }
 
-    const slots = getSlots();
-    const slot = slots.find(item => item.id === slotId);
+    const slot = getSlots().find(item => item.id === slotId);
 
     if (!slot) {
         showToast("Không tìm thấy lịch. Hãy tải lại trang.");
-        renderStudentPage();
         return;
     }
 
@@ -607,61 +605,121 @@ function bookSlot(slotId) {
         return;
     }
 
-    const bookings = getBookings();
-
-    if (bookings.some(item => item.slotId === slotId)) {
+    if (getBookings().some(item => item.slotId === slotId)) {
         showToast("Lịch này đã có người đăng ký.");
         renderStudentPage();
         return;
     }
 
-    // Yêu cầu nhập nội dung cần tư vấn.
-    const consultationContent = prompt(
-        "Bạn cần tư vấn vấn đề gì? Vui lòng nhập nội dung:"
-    );
+    // Mở popup nhập nội dung tư vấn
+    const modal = document.getElementById("consultation-modal");
+    const contentInput = document.getElementById("consultation-content");
+    const form = document.getElementById("consultation-form");
 
-    // Bấm Cancel hoặc để trống thì không đăng ký.
-    if (consultationContent === null ||
-        !consultationContent.trim()) {
-        showToast("Bạn chưa nhập nội dung cần tư vấn.");
+    if (!modal || !contentInput || !form) {
+        showToast("Không tìm thấy popup nhập nội dung tư vấn.");
         return;
     }
 
-    // Kiểm tra lại để hạn chế đăng ký trùng.
-    const latestBookings = getBookings();
+    contentInput.value = "";
+    modal.classList.remove("hidden");
+    contentInput.focus();
 
-    if (latestBookings.some(item => item.slotId === slotId)) {
-        showToast("Lịch này vừa được người khác đăng ký.");
+    // Xác nhận nội dung và đăng ký lịch
+    form.onsubmit = function (event) {
+        event.preventDefault();
+
+        const content = contentInput.value.trim();
+
+        if (!content) {
+            showToast("Vui lòng nhập nội dung cần tư vấn.");
+            contentInput.focus();
+            return;
+        }
+
+        const latestBookings = getBookings();
+
+        if (latestBookings.some(item => item.slotId === slotId)) {
+            modal.classList.add("hidden");
+            showToast("Lịch này vừa được người khác đăng ký.");
+            renderStudentPage();
+            return;
+        }
+
+        latestBookings.push({
+            id: makeId(),
+            slotId: slotId,
+            studentEmail: user.email.toLowerCase(),
+            studentName: user.name,
+            studentCode: profile.studentCode,
+            studentClass: profile.studentClass,
+            studentMajor: profile.studentMajor,
+            studentPhone: profile.studentPhone,
+            consultationContent: content
+        });
+
+        saveData(KEYS.bookings, latestBookings);
+
+        modal.classList.add("hidden");
+
+        showBookingPopup(
+            "Đăng ký thành công!",
+            "Bạn đã đăng ký lịch tư vấn với giảng viên thành công.",
+            "success"
+        );
+
         renderStudentPage();
-        return;
+    };
+}
+
+function initProfileRequiredModal() {
+    const modal = document.getElementById("profile-required-modal");
+
+    document.getElementById("profile-required-close")
+        ?.addEventListener("click", () => {
+            modal?.classList.add("hidden");
+        });
+
+    document.getElementById("profile-required-cancel")
+        ?.addEventListener("click", () => {
+            modal?.classList.add("hidden");
+        });
+
+    // Mở trang thông tin sinh viên.
+    document.getElementById("profile-required-fill")
+        ?.addEventListener("click", () => {
+            modal?.classList.add("hidden");
+
+            document.getElementById("open-student-profile-btn")
+                ?.click();
+        });
+
+    modal?.addEventListener("click", event => {
+        if (event.target === modal) {
+            modal.classList.add("hidden");
+        }
+    });
+}
+
+function initConsultationModal() {
+    const modal = document.getElementById("consultation-modal");
+    const closeButton = document.getElementById("consultation-close");
+    const cancelButton = document.getElementById("consultation-cancel");
+
+    function closeModal() {
+        modal?.classList.add("hidden");
     }
 
-    latestBookings.push({
-        id: makeId(),
-        slotId: slotId,
-        studentEmail: user.email.toLowerCase(),
-        studentName: user.name,
+    closeButton?.addEventListener("click", closeModal);
+    cancelButton?.addEventListener("click", closeModal);
 
-        // Thông tin lấy từ hồ sơ đã lưu.
-        studentCode: profile.studentCode,
-        studentClass: profile.studentClass,
-        studentMajor: profile.studentMajor,
-        studentPhone: profile.studentPhone,
-
-        // Nội dung riêng của lần đăng ký này.
-        consultationContent: consultationContent.trim()
+    modal?.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            closeModal();
+        }
     });
-
-    saveData(KEYS.bookings, latestBookings);
-
-    showBookingPopup(
-        "Đăng ký thành công!",
-        "Bạn đã đăng ký lịch tư vấn với giảng viên thành công.",
-        "success"
-    );
-
-    renderStudentPage();
 }
+
 function cancelBooking(slotId) {
     const user = getCurrentUser();
 
@@ -944,10 +1002,6 @@ function deleteSlot(slotId) {
 
     renderLecturerSlots();
 }
- // ========================================
- // ĐỔI MẬT KHẨU
- // ========================================
-
 // ========================================
 // MENU AVATAR VÀ ĐỔI MẬT KHẨU
 // ========================================
@@ -961,6 +1015,19 @@ function initChangePasswordForm() {
     const form = document.getElementById("change-password-form");
 
     const user = getCurrentUser();
+    // Hiển thị tên và email tài khoản đăng nhập
+if (user) {
+    const accountName = document.getElementById("account-login-name");
+    const accountEmail = document.getElementById("account-login-email");
+
+    if (accountName) {
+        accountName.textContent = user.name;
+    }
+
+    if (accountEmail) {
+        accountEmail.textContent = user.email;
+    }
+}
 
     // Hiển thị tên và avatar theo tài khoản.
     if (user) {
@@ -987,55 +1054,68 @@ function initChangePasswordForm() {
     // Tải ảnh đại diện từ máy tính
 const avatarInput = document.getElementById("avatar-upload");
 const avatarImage = document.getElementById("profile-avatar");
+const studentInfoAvatar = document.getElementById("student-info-avatar");
 
-if (user && avatarImage) {
-    // Ưu tiên ảnh đã lưu, nếu chưa có thì tạo avatar theo tên
-    const savedAvatar = localStorage.getItem(
-        "edumeet_avatar_" + user.email.toLowerCase()
+if (user) {
+    const nameElement = document.getElementById(
+        user.role === "lecturer"
+            ? "lecturer-user-name"
+            : "student-user-name"
     );
 
-    if (savedAvatar) {
-        avatarImage.src = savedAvatar;
-    } else {
-        avatarImage.src =
-            "https://ui-avatars.com/api/?name=" +
-            encodeURIComponent(user.name) +
-            "&background=635bdf&color=fff&size=96";
+    if (nameElement) {
+        nameElement.textContent = user.name;
+    }
+
+    const key = "edumeet_avatar_" + user.email.toLowerCase();
+    const savedAvatar = localStorage.getItem(key);
+
+    const defaultAvatar =
+        "https://ui-avatars.com/api/?name=" +
+        encodeURIComponent(user.name) +
+        "&background=0866b5&color=fff&size=96";
+
+    const currentAvatar = savedAvatar || defaultAvatar;
+
+    if (avatarImage) avatarImage.src = currentAvatar;
+
+    // Hiển thị cùng ảnh ở trang thông tin sinh viên
+    if (studentInfoAvatar) {
+        studentInfoAvatar.src = currentAvatar;
     }
 }
 
-if (avatarInput && avatarImage) {
+if (avatarInput && user) {
     avatarInput.addEventListener("change", function () {
         const file = avatarInput.files[0];
 
         if (!file) return;
 
-        // Chỉ chấp nhận ảnh
         if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
             alert("Vui lòng chọn ảnh JPG, PNG hoặc WEBP.");
             avatarInput.value = "";
             return;
         }
 
-        // Giới hạn dung lượng ảnh 2 MB
         if (file.size > 2 * 1024 * 1024) {
-            alert("Ảnh quá lớn! Vui lòng chọn ảnh không quá 2 MB.");
+            alert("Ảnh không được vượt quá 2 MB.");
             avatarInput.value = "";
             return;
         }
 
         const reader = new FileReader();
 
-        reader.onload = function (event) {
-            const imageData = event.target.result;
-
+        reader.onload = function () {
             try {
-                localStorage.setItem(
-                    "edumeet_avatar_" + user.email.toLowerCase(),
-                    imageData
-                );
+                const key = "edumeet_avatar_" + user.email.toLowerCase();
 
-                avatarImage.src = imageData;
+                localStorage.setItem(key, reader.result);
+
+                if (avatarImage) avatarImage.src = reader.result;
+                if (studentInfoAvatar) {
+                    studentInfoAvatar.src = reader.result;
+                }
+
                 alert("Cập nhật ảnh đại diện thành công!");
             } catch (error) {
                 alert("Không thể lưu ảnh. Bộ nhớ trình duyệt có thể đã đầy.");
@@ -1185,6 +1265,7 @@ function getStudentProfile(email) {
     return readData(getStudentProfileKey(email), null);
 }
 
+
 function initStudentProfilePage() {
     const openButton = document.getElementById("open-student-profile-btn");
     const profilePage = document.getElementById("student-profile-page");
@@ -1197,85 +1278,99 @@ function initStudentProfilePage() {
     const user = getCurrentUser();
     if (!user || user.role !== "student") return;
 
+    const fields = {
+        studentCode: "profile-student-code",
+        studentName: "profile-student-name",
+        dob: "profile-student-dob",
+        gender: "profile-student-gender",
+        studentClass: "profile-student-class",
+        studentMajor: "profile-student-major",
+        studentPhone: "profile-student-phone",
+        birthplace: "profile-student-birthplace",
+        nationality: "profile-student-nationality",
+        email: "profile-student-email",
+        address: "profile-student-address"
+    };
+
     const dashboardSections = [
         document.querySelector(".welcome-row"),
         document.querySelector(".stats-grid"),
         ...document.querySelectorAll(".section-block")
     ].filter(section => section && section !== profilePage);
 
-    // Hiển thị hồ sơ đã lưu nếu có.
-    const profile = getStudentProfile(user.email);
+    function fillProfile(profile = {}) {
+        Object.entries(fields).forEach(([key, id]) => {
+            const input = document.getElementById(id);
+            if (input) {
+                input.value = profile[key] ?? "";
+            }
+        });
 
-    if (profile) {
-        document.getElementById("profile-student-code").value =
-            profile.studentCode || "";
+        // Lấy thông tin mặc định từ tài khoản đăng nhập.
+        if (!profile.studentName) {
+            document.getElementById(fields.studentName).value = user.name;
+        }
 
-        document.getElementById("profile-student-class").value =
-            profile.studentClass || "";
+        if (!profile.email) {
+            document.getElementById(fields.email).value = user.email;
+        }
 
-        document.getElementById("profile-student-major").value =
-            profile.studentMajor || "";
-
-        document.getElementById("profile-student-phone").value =
-            profile.studentPhone || "";
+        if (!profile.nationality) {
+            document.getElementById(fields.nationality).value = "Việt Nam";
+        }
     }
 
-    // Mở trang hồ sơ từ menu avatar.
+    // Tải hồ sơ đã lưu.
+    fillProfile(getStudentProfile(user.email) || {});
+
+    // Mở hồ sơ.
     openButton.addEventListener("click", () => {
+        fillProfile(getStudentProfile(user.email) || {});
         dashboardSections.forEach(section =>
             section.classList.add("hidden")
         );
-
         profilePage.classList.remove("hidden");
         dropdown?.classList.add("hidden");
-
         window.scrollTo(0, 0);
     });
 
     // Quay lại trang chính.
     backButton.addEventListener("click", () => {
         profilePage.classList.add("hidden");
-
         dashboardSections.forEach(section =>
             section.classList.remove("hidden")
         );
-
         window.scrollTo(0, 0);
     });
 
-    // Lưu hồ sơ sinh viên.
+    // Lưu hồ sơ.
     form.addEventListener("submit", event => {
         event.preventDefault();
 
-        const studentCode =
-            document.getElementById("profile-student-code").value.trim();
+        const savedProfile = {
+            studentEmail: user.email.toLowerCase()
+        };
 
-        const studentClass =
-            document.getElementById("profile-student-class").value.trim();
+        Object.entries(fields).forEach(([key, id]) => {
+            const input = document.getElementById(id);
+            if (input) {
+                savedProfile[key] = input.value.trim();
+            }
+        });
 
-        const studentMajor =
-            document.getElementById("profile-student-major").value.trim();
-
-        const studentPhone =
-            document.getElementById("profile-student-phone").value.trim();
-
-        if (!studentCode || !studentClass ||
-            !studentMajor || !studentPhone) {
+        if (
+            !savedProfile.studentCode ||
+            !savedProfile.studentClass ||
+            !savedProfile.studentMajor ||
+            !savedProfile.studentPhone ||
+            !savedProfile.studentName
+        ) {
             showMessage(
                 "student-profile-message",
-                "Vui lòng nhập đầy đủ thông tin."
+                "Vui lòng nhập đầy đủ các thông tin bắt buộc."
             );
             return;
         }
-
-        const savedProfile = {
-            studentEmail: user.email.toLowerCase(),
-            studentName: user.name,
-            studentCode,
-            studentClass,
-            studentMajor,
-            studentPhone
-        };
 
         saveData(getStudentProfileKey(user.email), savedProfile);
 
@@ -1286,6 +1381,7 @@ function initStudentProfilePage() {
         );
     });
 }
+
 // ========================================
 // 7. KHỞI CHẠY
 // ========================================
@@ -1297,3 +1393,5 @@ initLecturerPage();
 initChangePasswordForm();
 initBookingPopup();
 initStudentProfilePage();
+initProfileRequiredModal();
+initConsultationModal();

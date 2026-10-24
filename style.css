@@ -1,13 +1,21 @@
 
 :root {
-    --primary: #635bdf;
-    --primary-dark: #4e46c9;
-    --ink: #24243a;
-    --muted: #77788c;
-    --line: #e8e8f1;
-    --bg: #f6f7fc;
-    --green: #15966a;
-    --orange: #e9953b;
+    /* Màu chủ đạo theo phong cách TVU */
+    --primary: #0866b5;
+    --primary-dark: #064f91;
+    --ink: #12345a;
+    --muted: #637b96;
+    --line: #d8e5f2;
+    --bg: #f2f8fd;
+
+    /* Màu phụ */
+    --green: #21865b;
+    --orange: #e5a323;
+
+    /* Màu nền và điểm nhấn */
+    --blue-light: #e7f3ff;
+    --blue-soft: #f3f8fe;
+    --gold: #f4c542;
 }
 
 * {
@@ -387,7 +395,7 @@ footer {
 .lecturer-slot-list,
 .booking-list {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 16px;
 }
 
@@ -504,7 +512,10 @@ footer {
         grid-template-columns: 1fr;
     }
 
-    .slot-grid,
+    .slot-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .lecturer-slot-list,
     .booking-list {
         grid-template-columns: 1fr;
@@ -738,11 +749,21 @@ footer {
     justify-content: center;
     width: 48px;
     height: 48px;
+    margin: 0 auto 16px;
     border-radius: 14px;
-    background: #f0eeff;
+    background: #e5f2ff;
+    color: #0866b5;
     font-size: 24px;
 }
+.profile-required-modal {
+    width: min(420px, 92vw);
+    padding: 28px;
+    text-align: center;
+}
 
+.profile-required-modal .password-modal-icon {
+    margin: 0 auto 16px;
+}
 .modal-close {
     position: absolute;
     top: 12px;
@@ -893,40 +914,6 @@ footer {
         transform: translateY(0) scale(1);
     }
 }
-/* Thông tin sinh viên hiển thị theo chiều dọc */
-#student-profile-page form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    max-width: 600px;
-    margin: 20px auto;
-}
-
-#student-profile-page form label {
-    display: block;
-    margin-bottom: -6px;
-    font-weight: 600;
-}
-
-#student-profile-page form input,
-#student-profile-page form textarea {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 12px;
-    border: 1px solid #d6d6e5;
-    border-radius: 8px;
-    font-size: 15px;
-}
-
-#student-profile-page form textarea {
-    resize: vertical;
-}
-
-#student-profile-page form button {
-    width: 100%;
-    margin-top: 8px;
-}
 /* Nút xóa lịch màu đỏ */
 button[data-delete] {
     background-color: #dc3545;
@@ -942,4 +929,554 @@ button[data-delete] {
 button[data-delete]:hover {
     background-color: #bb2d3b;
     border-color: #b02a37;
+}
+
+/* ==================================
+   EDUMEET - GIAO DIỆN TÔNG MÀU TVU
+   ================================== */
+
+/* Thanh đầu trang */
+.topbar {
+    background: #ffffff;
+    border-bottom: 2px solid #d9eafb;
+}
+
+.brand {
+    color: #084c8d;
+}
+
+.logo {
+    background: linear-gradient(135deg, #0875ca, #064b91);
+    border-radius: 12px;
+}
+
+/* Nền trang đăng nhập */
+body {
+    background-color: var(--bg);
+    color: var(--ink);
+}
+
+.auth-layout {
+    max-width: 1250px;
+    grid-template-columns: minmax(0, 1fr) 440px;
+    gap: 65px;
+}
+
+/* Tiêu đề bên trái */
+.eyebrow,
+.intro-panel .eyebrow {
+    color: #0866b5;
+}
+
+.intro-panel h1 {
+    color: #12345a;
+}
+
+.intro-panel h1 span {
+    color: #0878d1;
+}
+
+.intro-points {
+    color: #244b72;
+}
+
+/* Khung đăng nhập, đăng ký */
+.auth-card {
+    border: 1px solid #dce8f5;
+    border-radius: 22px;
+    box-shadow: 0 18px 45px rgba(19, 76, 130, 0.09);
+}
+
+.auth-tabs {
+    background: #edf4fc;
+}
+
+.auth-tab.active {
+    color: #0866b5;
+    background: #ffffff;
+    box-shadow: 0 3px 10px rgba(8, 102, 181, 0.10);
+}
+
+/* Ô nhập thông tin */
+.auth-form input,
+.auth-form select,
+.lecturer-form input,
+.lecturer-form select,
+.filters input,
+.filters select {
+    border-color: #d4e1ef;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #0878d1;
+    box-shadow: 0 0 0 3px rgba(8, 120, 209, 0.12);
+}
+
+/* Nút chính */
+.btn-primary {
+    background: linear-gradient(135deg, #0874c8, #0755a0);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background: #064783;
+}
+
+/* Nút phụ */
+.btn-outline {
+    border-color: #d5e3f1;
+    color: #164d7e;
+}
+
+.btn-outline:hover {
+    border-color: #0874c8;
+    color: #0874c8;
+    background: #f1f8ff;
+}
+
+/* Thông tin tài khoản dùng thử */
+.demo-hint {
+    background: #eaf4ff;
+    color: #174b7a;
+    border: 1px solid #d9eafb;
+}
+
+/* Giao diện sau đăng nhập */
+.dashboard-nav {
+    border-color: #d8e5f2;
+    box-shadow: 0 4px 16px rgba(19, 76, 130, 0.04);
+}
+
+.dashboard-nav .brand {
+    color: #084c8d;
+}
+
+.welcome-row h1 {
+    color: #12345a;
+}
+
+.section-heading h2 {
+    color: #12345a;
+}
+
+/* Các thẻ thống kê */
+.stat-card,
+.slot-card,
+.lecturer-slot-card,
+.booking-card,
+.lecturer-form {
+    border-color: #dce8f5;
+    box-shadow: 0 5px 18px rgba(19, 76, 130, 0.04);
+}
+
+.purple {
+    background: #e4f1ff;
+    color: #0866b5;
+}
+
+.green {
+    background: #e5f6ed;
+    color: #21865b;
+}
+
+.orange {
+    background: #fff5dc;
+    color: #a66b08;
+}
+
+/* Nhãn lịch tư vấn */
+.tag {
+    background: #e5f2ff;
+    color: #0866b5;
+}
+
+.tag.booked {
+    background: #fff3d6;
+    color: #936000;
+}
+
+/* Thông báo */
+.notice {
+    background: #e8f3ff;
+    color: #174b7a;
+    border: 1px solid #d5e8fa;
+}
+
+/* Menu tài khoản */
+.profile-button:hover {
+    border-color: #0874c8;
+    box-shadow: 0 3px 12px rgba(8, 102, 181, 0.12);
+}
+
+.profile-dropdown button:hover,
+.profile-dropdown-item:hover {
+    background: #edf6ff;
+    color: #0866b5;
+}
+
+/* Cửa sổ đổi mật khẩu */
+.password-modal-icon {
+    background: #e5f2ff;
+    color: #0866b5;
+}
+
+.modal-close {
+    color: #315777;
+}
+
+.modal-close:hover {
+    background: #eaf4ff;
+    color: #0755a0;
+}
+
+/* Popup thông báo */
+.booking-popup {
+    background: rgba(10, 35, 65, 0.48);
+}
+
+.booking-popup-content {
+    border: 1px solid #dce8f5;
+}
+
+.booking-popup-icon {
+    background: #e4f3ff;
+    color: #0866b5;
+}
+
+.booking-popup-content h2 {
+    color: #12345a;
+}
+
+.booking-popup-close {
+    color: #637b96;
+}
+
+.booking-popup-close:hover {
+    color: #0866b5;
+}
+
+/* Form thông tin sinh viên */
+#student-profile-page form input,
+#student-profile-page form textarea {
+    border-color: #d4e1ef;
+}
+
+/* Nút xóa lịch */
+button[data-delete] {
+    background: #c93642;
+    border-color: #c93642;
+    color: #ffffff;
+}
+
+button[data-delete]:hover {
+    background: #a92130;
+    border-color: #a92130;
+}
+
+/* Chân trang */
+footer {
+    color: #637b96;
+}
+
+/* Hiển thị trên điện thoại */
+@media (max-width: 800px) {
+    .auth-layout {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+}
+
+/* ===== NỀN ĐĂNG NHẬP EDUMEET - TÔNG XANH TVU ===== */
+
+body {
+    background: #eaf3fc;
+}
+
+/* Ảnh nền phủ toàn bộ khu vực đăng nhập */
+.auth-layout {
+    width: 100%;
+    max-width: none;
+    min-height: calc(100vh - 140px);
+    margin: 0;
+    padding: 50px max(5%, 30px);
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 440px;
+    gap: 50px;
+    align-items: center;
+
+    background-image:
+        linear-gradient(
+            90deg,
+            rgba(234, 243, 252, 0.88) 0%,
+            rgba(234, 243, 252, 0.78) 40%,
+            rgba(234, 243, 252, 0.25) 72%,
+            rgba(234, 243, 252, 0.12) 100%
+        ),
+        url("images/anh1.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Phần giới thiệu bên trái */
+.intro-panel {
+    position: relative;
+    z-index: 1;
+    padding: 25px 10px;
+    color: #12345a;
+}
+
+.intro-panel .eyebrow {
+    color: #0866b5;
+}
+
+.intro-panel h1 {
+    color: #12345a;
+    text-shadow: none;
+}
+
+.intro-panel h1 span {
+    color: #0866b5;
+}
+
+.intro-panel > p,
+.intro-panel .intro-points {
+    color: #244b72;
+    text-shadow: none;
+}
+
+/* Khung đăng nhập / đăng ký */
+.auth-card {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 440px;
+    justify-self: end;
+    transform: none;
+    background: rgba(255, 255, 255, 0.98);
+    border: 1px solid #d8e5f2;
+    border-radius: 22px;
+    box-shadow: 0 15px 45px rgba(8, 65, 120, 0.15);
+}
+
+/* Hiển thị trên máy tính bảng và điện thoại */
+@media (max-width: 800px) {
+    .auth-layout {
+        grid-template-columns: 1fr;
+        gap: 25px;
+        padding: 30px 20px;
+        background-position: center;
+    }
+
+    .auth-card {
+        justify-self: center;
+    }
+}
+.tvu-logo {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+/* ===== THÔNG TIN SINH VIÊN ===== */
+
+#student-profile-page .student-info-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+#student-profile-page .student-profile-avatar {
+    flex: 0 0 150px;
+}
+
+#student-profile-page .student-profile-avatar img {
+    display: block;
+    width: 150px;
+    height: 200px;
+    object-fit: cover;
+    border: 2px solid var(--primary);
+    border-radius: 10px;
+}
+
+#student-profile-page #student-profile-form {
+    flex: 1;
+    min-width: 0;
+    max-width: none;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+/* Mỗi trường là một nhóm riêng */
+#student-profile-page #student-profile-form .student-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+#student-profile-page #student-profile-form .student-field label {
+    margin: 0;
+}
+
+#student-profile-page #student-profile-form .student-field input,
+#student-profile-page #student-profile-form .student-field select,
+#student-profile-page #student-profile-form .student-field textarea {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 10px;
+}
+
+/* Địa chỉ và các phần cuối form */
+#student-profile-page .student-field-full,
+#student-profile-page #student-profile-message,
+#student-profile-page .student-form-actions {
+    grid-column: 1 / -1;
+}
+
+#student-profile-page #student-profile-message {
+    margin: 0;
+}
+
+#student-profile-page .student-form-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+#student-profile-page .student-form-actions button {
+    width: auto;
+    margin: 0;
+}
+
+/* Điện thoại */
+@media (max-width: 650px) {
+    #student-profile-page .student-info-layout {
+        flex-direction: column;
+    }
+
+    #student-profile-page #student-profile-form {
+        width: 100%;
+        grid-template-columns: 1fr;
+    }
+
+    #student-profile-page .student-field-full,
+    #student-profile-page #student-profile-message,
+    #student-profile-page .student-form-actions {
+        grid-column: 1;
+    }
+}
+.profile-account-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 12px 16px;
+    overflow-wrap: anywhere;
+}
+
+.profile-account-info strong {
+    font-size: 15px;
+    color: var(--text);
+}
+
+.profile-account-info span {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.profile-dropdown hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 4px 0;
+}
+/* Thông tin tài khoản trong menu avatar */
+.profile-account-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 16px;
+    overflow-wrap: anywhere;
+    color: #1e293b;
+}
+
+.profile-account-info strong {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+    line-height: 1.6;
+}
+
+.profile-account-info span {
+    font-size: 15px;
+    font-weight: 600;
+    color: #374151;
+    line-height: 1.6;
+}
+
+.profile-dropdown hr {
+    border: none;
+    border-top: 1px solid #d1d5db;
+    margin: 4px 0;
+}
+.profile-required-modal {
+    width: min(420px, 92vw);
+    padding: 28px;
+    text-align: center;
+}
+
+.profile-required-modal h2 {
+    margin-bottom: 12px;
+}
+
+.profile-required-modal p {
+    line-height: 1.6;
+}
+
+.profile-required-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+}
+/* POPUP NHẬP NỘI DUNG TƯ VẤN */
+.consultation-modal {
+    max-width: 450px;
+    text-align: center;
+}
+
+.consultation-modal .password-modal-icon {
+    margin: 0 auto 16px;
+}
+
+#consultation-content {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    font: inherit;
+    resize: vertical;
+}
+
+.consultation-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.consultation-actions .btn {
+    margin-top: 16px;
+}
+#account-login-name,
+#account-login-email {
+    font-weight: 700;
 }
